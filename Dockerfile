@@ -61,6 +61,6 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node healthcheck.js || exit 1
 
 # 设置启动命令
-# 使用默认配置启动服务器，支持通过环境变量配置
-# 通过环境变量传递参数，例如：docker run -e ARGS="--api-key mykey --port 8080" ...
-CMD ["sh", "-c", "node src/core/master.js $ARGS"]
+# Railway injects PORT at runtime. Keep ARGS after the defaults so explicit
+# command-line flags can still override host, port, API key, or providers.
+CMD ["sh", "-c", "node src/core/master.js --host 0.0.0.0 --port ${PORT:-3000} $ARGS"]
